@@ -1,0 +1,28 @@
+---
+
+ - name: Shutdown Unused ports
+   hosts: Switches
+   connection: network_cli
+   gather_facts: false
+   vars:
+      Item_desc: "{{ item.value.description }}"
+      
+  
+   tasks:
+      - name: Get info
+        ios_facts:
+           gather_subset: interfaces
+        register: iosfacts
+        
+       - name: Show IOS facts
+         debug: 
+            msg: "show {{iosfacts.ansible_facts.ansible_net_interfaces }}"
+            
+        - name: Shutdown unused ports
+          ios_config:
+            lines:
+             - shutdown
+            parents: "interface {{ item.key }}"
+          with_dict: "{{ iosfacts.ansible_facts.ansible_net_interfaces }}"
+          when:
+            - item.value.operstatus == "down"
