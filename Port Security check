@@ -1,0 +1,13 @@
+---
+- name: PScheck
+  hosts: NTL
+  gather_facts: no
+
+  tasks:
+  - name: Check for err-disabled ports
+    ios_command:
+      commands:
+        - show int status err-dis
+    register: out
+
+  - debug: var=out.stdout_lines
