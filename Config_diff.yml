@@ -1,0 +1,14 @@
+---
+- name: Master Config
+  hosts: NTL
+  gather_facts: no
+
+
+  tasks:
+  - name: Compare Configs
+    ios_config:
+      diff_against: intended
+      intended_config: "{{ lookup('file', 'Golden_Config.txt') }}"
+      diff_ignore_lines:
+       - hostname *
+       - ip address *
