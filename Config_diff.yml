@@ -12,3 +12,6 @@
       diff_ignore_lines:
        - hostname *
        - ip address *
+
+
+ansible-playbook Config_diff.yml --limit "172.16.12.200" --diff
